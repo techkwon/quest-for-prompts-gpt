@@ -21,11 +21,11 @@ interface UserProgress {
 const Index = () => {
   const [userProgress, setUserProgress] = useState<UserProgress>({
     level: 1,
-    experience: 120,
+    experience: 0,
     experienceToNext: 200,
     title: "GPT 초보자",
-    completedQuests: 3,
-    totalScore: 245
+    completedQuests: 0,
+    totalScore: 0
   });
 
   const [showQuestModal, setShowQuestModal] = useState(false);
@@ -72,6 +72,14 @@ const Index = () => {
       title: levelTitles[Math.min(prev.level - 1, levelTitles.length - 1)]
     }));
   }, [userProgress.level]);
+
+  // 저장된 활동 불러오기
+  const getRecentActivities = () => {
+    const savedPrompts = JSON.parse(localStorage.getItem('promptLibrary') || '[]');
+    return savedPrompts.slice(-3).reverse(); // 최근 3개만 표시
+  };
+
+  const recentActivities = getRecentActivities();
 
   return (
     <div className="min-h-screen p-4 md:p-8">
@@ -175,14 +183,21 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                <Badge variant="secondary" className="bg-magic-100 text-magic-700">
-                  <Star className="h-3 w-3 mr-1" />
-                  첫 퀘스트
-                </Badge>
-                <Badge variant="secondary" className="bg-wisdom-100 text-wisdom-700">
-                  <Users className="h-3 w-3 mr-1" />
-                  교실 도우미
-                </Badge>
+                {userProgress.completedQuests > 0 && (
+                  <Badge variant="secondary" className="bg-magic-100 text-magic-700">
+                    <Star className="h-3 w-3 mr-1" />
+                    첫 퀘스트
+                  </Badge>
+                )}
+                {userProgress.level >= 2 && (
+                  <Badge variant="secondary" className="bg-wisdom-100 text-wisdom-700">
+                    <Users className="h-3 w-3 mr-1" />
+                    교실 도우미
+                  </Badge>
+                )}
+                {userProgress.completedQuests === 0 && (
+                  <p className="text-sm text-gray-500">퀘스트를 완료하여 칭호를 획득하세요!</p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -197,29 +212,25 @@ const Index = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 bg-success-50 rounded-lg">
-                <div>
-                  <div className="font-medium">산만한 학생 대응 퀘스트 완료</div>
-                  <div className="text-sm text-gray-500">85점 획득 • 50 경험치</div>
-                </div>
-                <Badge className="bg-success-500 text-white">완료</Badge>
+            {recentActivities.length > 0 ? (
+              <div className="space-y-4">
+                {recentActivities.map((activity: any, index: number) => (
+                  <div key={activity.id} className="flex items-center justify-between p-3 bg-success-50 rounded-lg">
+                    <div>
+                      <div className="font-medium">{activity.questTitle} 퀘스트 완료</div>
+                      <div className="text-sm text-gray-500">{activity.score}점 획득 • {activity.score >= 90 ? 60 : activity.score >= 80 ? 50 : 40} 경험치</div>
+                    </div>
+                    <Badge className="bg-success-500 text-white">완료</Badge>
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center justify-between p-3 bg-wisdom-50 rounded-lg">
-                <div>
-                  <div className="font-medium">학부모 상담 준비 퀘스트 완료</div>
-                  <div className="text-sm text-gray-500">92점 획득 • 60 경험치</div>
-                </div>
-                <Badge className="bg-wisdom-500 text-white">완료</Badge>
+            ) : (
+              <div className="text-center py-8">
+                <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">아직 완료한 퀘스트가 없습니다.</p>
+                <p className="text-sm text-gray-400 mt-1">첫 퀘스트를 시작해보세요!</p>
               </div>
-              <div className="flex items-center justify-between p-3 bg-magic-50 rounded-lg">
-                <div>
-                  <div className="font-medium">수업 자료 생성 퀘스트 완료</div>
-                  <div className="text-sm text-gray-500">78점 획득 • 40 경험치</div>
-                </div>
-                <Badge className="bg-magic-500 text-white">완료</Badge>
-              </div>
-            </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -229,6 +240,7 @@ const Index = () => {
         isOpen={showQuestModal} 
         onClose={() => setShowQuestModal(false)}
         onComplete={handleQuestComplete}
+        userLevel={userProgress.level}
       />
       
       <PromptLibrary 
