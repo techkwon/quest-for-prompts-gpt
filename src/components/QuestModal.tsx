@@ -104,7 +104,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete }) 
           '원하는 결과를 더 명확히 제시해보세요',
           '단계적 접근 방법을 요청해보세요'
         ],
-        recommendedPrompt: `${currentQuest.title}에 대한 개선된 프롬프트: "${currentQuest.scenario}에서 게임을 좋아하는 A학생의 특성을 활용하여 수업 참여도를 높일 수 있는 구체적이고 단계적인 전략을 3가지 제시해주세요. 각 전략별로 실행 방법과 예상 효과도 함께 설명해주세요."`,
+        recommendedPrompt: `${currentQuest.title}에 대한 개선된 프롬프트: "${currentQuest.scenario}에서 게임을 좋아하는 A학생의 특성을 활용하여 수업 참여도를 높을 수 있는 구체적이고 단계적인 전략을 3가지 제시해주세요. 각 전략별로 실행 방법과 예상 효과도 함께 설명해주세요."`,
         explanation: '좋은 프롬프트는 상황, 목표, 제약조건을 명확히 제시하고 구체적인 결과물을 요청합니다.'
       };
 
@@ -127,7 +127,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete }) 
       toast({
         title: "오류가 발생했습니다",
         description: "다시 시도해주세요.",
-        variants: "destructive"
+        variant: "destructive"
       });
     } finally {
       setIsLoading(false);
