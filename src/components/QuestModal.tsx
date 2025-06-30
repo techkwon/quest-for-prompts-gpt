@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Loader2, Send, CheckCircle, XCircle, Lightbulb, Target, Star, ArrowRight, RotateCcw } from 'lucide-react';
+import { Loader2, Send, CheckCircle, XCircle, Lightbulb, Target, Star, ArrowRight, RotateCcw, BookOpen, TrendingUp } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface QuestModalProps {
@@ -32,6 +31,7 @@ interface Feedback {
   improvements: string[];
   recommendedPrompt: string;
   explanation: string;
+  tips: string[];
 }
 
 const allQuests: Quest[] = [
@@ -856,10 +856,11 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
   const [availableQuests, setAvailableQuests] = useState<Quest[]>([]);
   const [selectedQuests, setSelectedQuests] = useState<Quest[]>([]);
   const [currentQuestIndex, setCurrentQuestIndex] = useState(0);
-  const [userPrompts, setUserPrompts] = useState<string[]>(['', '', '']);
+  const [userPrompt, setUserPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [feedback, setFeedback] = useState<Feedback[]>([]);
-  const [step, setStep] = useState<'select' | 'progress' | 'feedback'>('select');
+  const [currentFeedback, setCurrentFeedback] = useState<Feedback | null>(null);
+  const [step, setStep] = useState<'select' | 'solving' | 'feedback' | 'final'>('select');
+  const [completedQuests, setCompletedQuests] = useState<{quest: Quest, prompt: string, feedback: Feedback}[]>([]);
   const [totalScore, setTotalScore] = useState(0);
   const { toast } = useToast();
 
@@ -876,8 +877,9 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
     setStep('select');
     setSelectedQuests([]);
     setCurrentQuestIndex(0);
-    setUserPrompts(['', '', '']);
-    setFeedback([]);
+    setUserPrompt('');
+    setCurrentFeedback(null);
+    setCompletedQuests([]);
     setTotalScore(0);
   };
 
@@ -885,61 +887,69 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
     const shuffled = [...availableQuests].sort(() => 0.5 - Math.random());
     const selected = shuffled.slice(0, 3);
     setSelectedQuests(selected);
-    setStep('progress');
+    setStep('solving');
+  };
+
+  const generateMockFeedback = (quest: Quest, prompt: string): Feedback => {
+    const baseScore = Math.floor(Math.random() * 30) + 70; // 70-100 range
+    
+    const allTips = [
+      '상황을 더 구체적으로 설명하면 AI가 더 정확한 답변을 제공할 수 있습니다.',
+      '단계별 접근 방법을 요청하면 실행하기 쉬운 해결책을 얻을 수 있습니다.',
+      '예상되는 결과나 목표를 명시하면 더 맞춤형 조언을 받을 수 있습니다.',
+      '학생의 연령대나 특성을 언급하면 더 적절한 방법을 제안받을 수 있습니다.',
+      '여러 대안을 요청하면 다양한 선택지를 고려할 수 있습니다.',
+      '구체적인 예시를 요청하면 실제 상황에 바로 적용할 수 있습니다.',
+      '제약 조건이나 고려사항을 명시하면 더 현실적인 해결책을 얻을 수 있습니다.'
+    ];
+
+    const levelBasedTips = userLevel === 1 ? [
+      '프롬프트 끝에 "구체적인 예시와 함께 설명해주세요"를 추가해보세요.',
+      '상황의 배경 정보를 더 자세히 설명하면 좋습니다.',
+      '"단계별로", "구체적으로" 같은 키워드를 사용해보세요.'
+    ] : userLevel === 2 ? [
+      '역할을 부여하는 방식을 시도해보세요. 예: "당신은 경험 많은 교육 전문가입니다."',
+      '원하는 결과물의 형태를 명시해보세요. 예: "3가지 방법을 표로 정리해주세요."',
+      '맥락과 제약조건을 함께 제시하면 더 실용적인 답변을 얻을 수 있습니다.'
+    ] : [
+      'Few-shot 프롬프팅 기법을 활용해보세요. 좋은 예시를 먼저 제시하고 원하는 답변을 요청하세요.',
+      'Chain-of-thought 기법으로 단계별 사고 과정을 요청해보세요.',
+      '복잡한 문제는 여러 하위 질문으로 나누어 접근해보세요.'
+    ];
+
+    const selectedTips = [...levelBasedTips, ...allTips.slice(0, 3)];
+    
+    return {
+      score: baseScore,
+      strengths: [
+        '문제 상황을 명확하게 제시했습니다',
+        '실제 교실 상황과 연결지어 생각했습니다',
+        '구체적인 도움을 요청했습니다'
+      ],
+      improvements: [
+        '더 구체적인 맥락 정보가 있으면 좋겠습니다',
+        '원하는 결과물의 형태를 명시해보세요',
+        '단계별 접근 방법을 요청해보세요'
+      ],
+      recommendedPrompt: `개선된 프롬프트 예시: "초등학교 3학년 담임교사입니다. ${quest.scenario} 이 상황에서 학생의 행동 변화를 위한 구체적이고 실행 가능한 방법을 3가지 제시해주시고, 각 방법별로 예상 효과와 주의사항도 함께 설명해주세요."`,
+      explanation: `이 프롬프트는 ${baseScore}점입니다. ${baseScore >= 90 ? '매우 훌륭한' : baseScore >= 80 ? '좋은' : '개선이 필요한'} 프롬프트입니다.`,
+      tips: selectedTips
+    };
   };
 
   const submitPrompt = async () => {
-    if (!userPrompts[currentQuestIndex].trim()) return;
+    if (!userPrompt.trim()) return;
 
     setIsLoading(true);
 
     try {
-      // Simulate API call to ChatGPT for evaluation
+      // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      // Simulated feedback based on prompt quality
       const currentQuest = selectedQuests[currentQuestIndex];
-      const mockFeedback: Feedback = {
-        score: Math.floor(Math.random() * 30) + 70, // 70-100 range
-        strengths: [
-          '상황 설명이 명확합니다',
-          '구체적인 맥락을 제공했습니다',
-          '실행 가능한 해결책을 요청했습니다'
-        ],
-        improvements: [
-          '학생의 개별 특성을 더 구체적으로 명시하면 좋겠습니다',
-          '원하는 결과를 더 명확히 제시해보세요',
-          '단계적 접근 방법을 요청해보세요'
-        ],
-        recommendedPrompt: `${currentQuest.title}에 대한 개선된 프롬프트: "${currentQuest.scenario}에서 구체적이고 단계적인 해결 방안을 3가지 제시해주세요. 각 방안별로 실행 방법과 예상 효과도 함께 설명해주세요."`,
-        explanation: '좋은 프롬프트는 상황, 목표, 제약조건을 명확히 제시하고 구체적인 결과물을 요청합니다.'
-      };
-
-      const newFeedback = [...feedback, mockFeedback];
-      setFeedback(newFeedback);
-      setTotalScore(prev => prev + mockFeedback.score);
-
-      // 다음 문제로 이동 또는 완료
-      if (currentQuestIndex < 2) {
-        setCurrentQuestIndex(prev => prev + 1);
-      } else {
-        // 모든 문제 완료 - 결과 저장
-        const finalScore = totalScore + mockFeedback.score;
-        selectedQuests.forEach((quest, index) => {
-          const savedPrompts = JSON.parse(localStorage.getItem('promptLibrary') || '[]');
-          savedPrompts.push({
-            id: Date.now().toString() + `-${index}`,
-            questTitle: quest.title,
-            prompt: userPrompts[index],
-            score: newFeedback[index]?.score || 0,
-            date: new Date().toISOString(),
-            feedback: newFeedback[index]
-          });
-          localStorage.setItem('promptLibrary', JSON.stringify(savedPrompts));
-        });
-        
-        setStep('feedback');
-      }
+      const feedback = generateMockFeedback(currentQuest, userPrompt);
+      setCurrentFeedback(feedback);
+      setStep('feedback');
 
     } catch (error) {
       toast({
@@ -952,8 +962,43 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
     }
   };
 
+  const proceedToNext = () => {
+    if (!currentFeedback) return;
+
+    // 현재 문제 완료 기록
+    const completedQuest = {
+      quest: selectedQuests[currentQuestIndex],
+      prompt: userPrompt,
+      feedback: currentFeedback
+    };
+    setCompletedQuests(prev => [...prev, completedQuest]);
+    setTotalScore(prev => prev + currentFeedback.score);
+
+    // 프롬프트 저장소에 저장
+    const savedPrompts = JSON.parse(localStorage.getItem('promptLibrary') || '[]');
+    savedPrompts.push({
+      id: Date.now().toString(),
+      questTitle: selectedQuests[currentQuestIndex].title,
+      prompt: userPrompt,
+      score: currentFeedback.score,
+      date: new Date().toISOString(),
+      feedback: currentFeedback
+    });
+    localStorage.setItem('promptLibrary', JSON.stringify(savedPrompts));
+
+    // 다음 문제로 이동 또는 최종 결과
+    if (currentQuestIndex < 2) {
+      setCurrentQuestIndex(prev => prev + 1);
+      setUserPrompt('');
+      setCurrentFeedback(null);
+      setStep('solving');
+    } else {
+      setStep('final');
+    }
+  };
+
   const completeQuest = () => {
-    const finalScore = totalScore;
+    const finalScore = totalScore + (currentFeedback?.score || 0);
     const averageScore = Math.round(finalScore / 3);
     const experience = averageScore >= 90 ? 180 : averageScore >= 80 ? 150 : 120;
     onComplete(finalScore, experience);
@@ -977,12 +1022,6 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
     }
   };
 
-  const updatePrompt = (value: string) => {
-    const newPrompts = [...userPrompts];
-    newPrompts[currentQuestIndex] = value;
-    setUserPrompts(newPrompts);
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -992,7 +1031,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
             프롬프트 퀘스트 - 레벨 {userLevel}
           </DialogTitle>
           <DialogDescription>
-            3개의 문제를 연속으로 풀어 레벨업하세요! (사용 가능한 퀘스트: {availableQuests.length}개)
+            단계별 학습으로 프롬프트 작성 실력을 향상시켜보세요!
           </DialogDescription>
         </DialogHeader>
 
@@ -1000,10 +1039,10 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
           <div className="space-y-6">
             <div className="text-center">
               <h3 className="text-lg font-semibold mb-2">랜덤 퀘스트 3개에 도전하세요!</h3>
-              <p className="text-gray-600 mb-4">레벨 {userLevel}에서 도전할 수 있는 퀘스트들로구성됩니다</p>
+              <p className="text-gray-600 mb-4">문제 하나씩 풀고 피드백을 받아 실력을 향상시킬 수 있습니다</p>
               <Button onClick={selectRandomQuests} className="magic-gradient text-white">
                 <Target className="h-4 w-4 mr-2" />
-                퀘스트 3개 선택하기
+                퀘스트 시작하기
               </Button>
             </div>
 
@@ -1031,7 +1070,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
           </div>
         )}
 
-        {step === 'progress' && selectedQuests.length > 0 && (
+        {step === 'solving' && selectedQuests.length > 0 && (
           <div className="space-y-6">
             {/* Progress Indicator */}
             <div className="flex items-center justify-between">
@@ -1084,13 +1123,13 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                 이 상황에 대한 AI 프롬프트를 작성해주세요
               </label>
               <Textarea
-                value={userPrompts[currentQuestIndex]}
-                onChange={(e) => updatePrompt(e.target.value)}
+                value={userPrompt}
+                onChange={(e) => setUserPrompt(e.target.value)}
                 placeholder="예: 이 상황에서 구체적이고 실행 가능한 해결 방법을 단계별로 제시해주세요..."
                 className="min-h-[150px] resize-none"
               />
               <div className="text-sm text-gray-500 mt-2">
-                {userPrompts[currentQuestIndex].length}/500자
+                {userPrompt.length}/500자
               </div>
             </div>
 
@@ -1103,18 +1142,18 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
               </Button>
               <Button 
                 onClick={submitPrompt}
-                disabled={!userPrompts[currentQuestIndex].trim() || isLoading}
+                disabled={!userPrompt.trim() || isLoading}
                 className="magic-gradient text-white flex-1"
               >
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    AI가 평가 중...
+                    채점 중...
                   </>
                 ) : (
                   <>
                     <Send className="h-4 w-4 mr-2" />
-                    {currentQuestIndex < 2 ? '다음 문제로' : '완료하기'}
+                    제출하기
                   </>
                 )}
               </Button>
@@ -1122,69 +1161,175 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
           </div>
         )}
 
-        {step === 'feedback' && (
+        {step === 'feedback' && currentFeedback && (
           <div className="space-y-6">
-            {/* Total Score Display */}
-            <Card className="text-center">
+            {/* Score Display */}
+            <Card className="text-center bg-gradient-to-r from-magic-50 to-success-50 border-magic-200">
               <CardContent className="pt-6">
-                <div className="text-6xl font-bold text-magic-600 mb-2">
-                  {totalScore}
+                <div className="text-5xl font-bold text-magic-600 mb-2">
+                  {currentFeedback.score}점
                 </div>
-                <div className="text-xl text-gray-600 mb-4">점 / 300점</div>
-                <div className="text-lg text-gray-500 mb-4">
-                  평균: {Math.round(totalScore / 3)}점
+                <div className="text-lg text-gray-600 mb-4">
+                  {currentFeedback.score >= 90 ? '🌟 완벽해요!' : 
+                   currentFeedback.score >= 80 ? '✨ 훌륭해요!' : 
+                   '💪 잘했어요!'}
                 </div>
-                <Progress value={(totalScore / 300) * 100} className="mb-4" />
-                <div className="flex items-center justify-center gap-2">
-                  {totalScore >= 270 ? (
-                    <>
-                      <Star className="h-5 w-5 text-yellow-500" />
-                      <span className="text-yellow-600 font-medium">완벽합니다!</span>
-                    </>
-                  ) : totalScore >= 240 ? (
-                    <>
-                      <CheckCircle className="h-5 w-5 text-success-500" />
-                      <span className="text-success-600 font-medium">훌륭합니다!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Lightbulb className="h-5 w-5 text-yellow-500" />
-                      <span className="text-yellow-600 font-medium">잘했어요!</span>
-                    </>
-                  )}
+                <Progress value={currentFeedback.score} className="mb-4" />
+                <p className="text-sm text-gray-600">{currentFeedback.explanation}</p>
+              </CardContent>
+            </Card>
+
+            {/* My Prompt */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-wisdom-600" />
+                  내가 작성한 프롬프트
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-gray-50 p-4 rounded-lg text-sm">
+                  {userPrompt}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Individual Quest Results */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">문제별 결과</h3>
-              {selectedQuests.map((quest, index) => (
-                <Card key={quest.id} className="border-l-4 border-l-magic-500">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-base">{quest.title}</CardTitle>
-                      <div className="text-2xl font-bold text-magic-600">
-                        {feedback[index]?.score || 0}점
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-sm text-gray-600 mb-2">
-                      <strong>내가 작성한 프롬프트:</strong>
-                    </div>
-                    <div className="bg-gray-50 p-3 rounded mb-3 text-sm">
-                      {userPrompts[index]}
-                    </div>
-                    {feedback[index] && (
-                      <div className="text-sm">
-                        <strong>피드백:</strong> {feedback[index].explanation}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
+            {/* Detailed Feedback */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <Card className="border-success-200 bg-success-50">
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-success-600" />
+                    잘한 점
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {currentFeedback.strengths.map((strength, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <Star className="h-4 w-4 text-success-600 mt-0.5" />
+                        <span className="text-sm text-success-800">{strength}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="border-yellow-200 bg-yellow-50">
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-yellow-600" />
+                    개선 포인트
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {currentFeedback.improvements.map((improvement, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <ArrowRight className="h-4 w-4 text-yellow-600 mt-0.5" />
+                        <span className="text-sm text-yellow-800">{improvement}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
             </div>
+
+            {/* Recommended Prompt */}
+            <Card className="border-magic-200 bg-magic-50">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Lightbulb className="h-5 w-5 text-magic-600" />
+                  추천 프롬프트
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-white p-4 rounded-lg border border-magic-200 text-sm mb-4">
+                  {currentFeedback.recommendedPrompt}
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-medium text-sm">💡 프롬프트 작성 팁:</h4>
+                  <ul className="space-y-1">
+                    {currentFeedback.tips.map((tip, index) => (
+                      <li key={index} className="text-xs text-gray-600 flex items-start gap-2">
+                        <span className="text-magic-500">•</span>
+                        {tip}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="flex gap-3">
+              <Button 
+                variant="outline" 
+                onClick={resetQuest}
+                className="flex items-center gap-2"
+              >
+                <RotateCcw className="h-4 w-4" />
+                처음부터 다시
+              </Button>
+              <Button 
+                onClick={proceedToNext}
+                className="magic-gradient text-white flex-1"
+              >
+                {currentQuestIndex < 2 ? (
+                  <>
+                    <ArrowRight className="h-4 w-4 mr-2" />
+                    다음 문제로
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    퀘스트 완료
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {step === 'final' && (
+          <div className="space-y-6">
+            {/* Final Score */}
+            <Card className="text-center bg-gradient-to-r from-magic-100 to-success-100">
+              <CardContent className="pt-6">
+                <div className="text-6xl font-bold text-magic-600 mb-2">
+                  {totalScore + (currentFeedback?.score || 0)}
+                </div>
+                <div className="text-xl text-gray-600 mb-4">점 / 300점</div>
+                <div className="text-lg text-gray-500 mb-4">
+                  평균: {Math.round((totalScore + (currentFeedback?.score || 0)) / 3)}점
+                </div>
+                <Progress value={((totalScore + (currentFeedback?.score || 0)) / 300) * 100} className="mb-4" />
+                <div className="text-lg font-medium text-magic-700">
+                  🎉 퀘스트 완료! 수고하셨습니다!
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Summary */}
+            <Card>
+              <CardHeader>
+                <CardTitle>학습 결과 요약</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[...completedQuests, currentFeedback ? {quest: selectedQuests[currentQuestIndex], prompt: userPrompt, feedback: currentFeedback} : null].filter(Boolean).map((item, index) => (
+                    <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium">{item!.quest.title}</h4>
+                        <Badge className={`${item!.feedback.score >= 90 ? 'bg-purple-500' : item!.feedback.score >= 80 ? 'bg-success-500' : 'bg-yellow-500'} text-white`}>
+                          {item!.feedback.score}점
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-gray-600">{item!.feedback.explanation}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
             <div className="flex gap-3">
               <Button 
@@ -1199,7 +1344,8 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                 onClick={completeQuest}
                 className="magic-gradient text-white flex-1"
               >
-                퀘스트 완료하기
+                <CheckCircle className="h-4 w-4 mr-2" />
+                완료하고 경험치 받기
               </Button>
             </div>
           </div>
