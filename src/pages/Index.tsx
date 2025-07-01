@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles, BookOpen, Trophy, Star, Wand2, GraduationCap, Target, Users, Medal, Crown, Zap, Flame } from 'lucide-react';
+import { Sparkles, BookOpen, Trophy, Star, Wand2, GraduationCap, Target, Users, Medal, Crown, Zap, Flame, Heart, Smile } from 'lucide-react';
 import QuestModal from '@/components/QuestModal';
 import PromptLibrary from '@/components/PromptLibrary';
 import { useToast } from '@/hooks/use-toast';
@@ -180,134 +179,145 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
+    <div className="min-h-screen p-3 md:p-6 lg:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Wand2 className="h-8 w-8 text-magic-600" />
-            <h1 className="text-4xl md:text-5xl font-bold sparkle-text">
+        <div className="text-center mb-6 md:mb-8">
+          <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
+            <Wand2 className="h-6 w-6 md:h-8 md:w-8 text-magic-600 animate-pulse" />
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold sparkle-text">
               Prompt Quest
             </h1>
-            <Sparkles className="h-8 w-8 text-magic-600 animate-sparkle" />
+            <Sparkles className="h-6 w-6 md:h-8 md:w-8 text-magic-600 animate-sparkle" />
           </div>
-          <p className="text-xl text-gray-600 mb-2">교실의 마법사 되기</p>
-          <p className="text-gray-500">AI 프롬프트 작성을 게임처럼 재미있게 배워보세요!</p>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Heart className="h-4 w-4 text-pink-500" />
+            <p className="text-lg md:text-xl text-gray-600">교실의 마법사 되기</p>
+            <Heart className="h-4 w-4 text-pink-500" />
+          </div>
+          <p className="text-sm md:text-base text-gray-500 px-4">AI 프롬프트 작성을 게임처럼 재미있게 배워보세요!</p>
         </div>
 
         {/* User Progress Card */}
-        <Card className="mb-8 magic-gradient text-white card-hover">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                  <GraduationCap className="h-8 w-8" />
+        <Card className="mb-6 md:mb-8 magic-gradient text-white card-hover shadow-xl rounded-2xl border-0">
+          <CardHeader className="pb-4">
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:justify-between">
+              <div className="flex items-center gap-3 text-center sm:text-left">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <GraduationCap className="h-6 w-6 md:h-8 md:w-8" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl">{userProgress.title}</CardTitle>
-                  <CardDescription className="text-white/80">
+                  <CardTitle className="text-xl md:text-2xl font-bold">{userProgress.title}</CardTitle>
+                  <CardDescription className="text-white/80 text-sm md:text-base">
                     레벨 {userProgress.level} • {userProgress.completedQuests}개 퀘스트 완료
                   </CardDescription>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-3xl font-bold">{userProgress.totalScore}</div>
-                <div className="text-white/80">총 점수</div>
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-bold flex items-center gap-1">
+                  <Star className="h-5 w-5 md:h-6 md:w-6 text-yellow-300" />
+                  {userProgress.totalScore}
+                </div>
+                <div className="text-white/80 text-sm">총 점수</div>
               </div>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>경험치</span>
-                  <span>{userProgress.experience}/{userProgress.experienceToNext}</span>
-                </div>
-                <Progress value={progressPercentage} className="bg-white/20" />
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>경험치</span>
+                <span>{userProgress.experience}/{userProgress.experienceToNext}</span>
               </div>
-              
-              {/* 새로운 통계 섹션 */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-white/20">
-                <div className="text-center">
-                  <div className={`text-2xl font-bold ${getAverageScoreColor(userProgress.averageScore)}`}>
-                    {userProgress.completedQuests > 0 ? userProgress.averageScore : 0}
-                  </div>
-                  <div className="text-white/80 text-sm">평균 점수</div>
+              <div className="relative">
+                <Progress value={progressPercentage} className="bg-white/20 h-3 rounded-full overflow-hidden" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse rounded-full" />
+              </div>
+            </div>
+            
+            {/* 새로운 통계 섹션 */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 pt-4 border-t border-white/20">
+              <div className="text-center p-3 bg-white/10 rounded-xl backdrop-blur-sm">
+                <div className={`text-xl md:text-2xl font-bold ${getAverageScoreColor(userProgress.averageScore)}`}>
+                  {userProgress.completedQuests > 0 ? userProgress.averageScore : 0}
                 </div>
-                <div className="text-center">
-                  <div className={`text-2xl font-bold flex items-center justify-center gap-1 ${getStreakColor(userProgress.streak)}`}>
-                    <Flame className="h-5 w-5" />
-                    {userProgress.streak}
-                  </div>
-                  <div className="text-white/80 text-sm">연속 성공</div>
+                <div className="text-white/80 text-xs md:text-sm">평균 점수</div>
+              </div>
+              <div className="text-center p-3 bg-white/10 rounded-xl backdrop-blur-sm">
+                <div className={`text-xl md:text-2xl font-bold flex items-center justify-center gap-1 ${getStreakColor(userProgress.streak)}`}>
+                  <Flame className="h-4 w-4 md:h-5 md:w-5" />
+                  {userProgress.streak}
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-yellow-400">
-                    {userProgress.maxStreak}
-                  </div>
-                  <div className="text-white/80 text-sm">최고 연속</div>
+                <div className="text-white/80 text-xs md:text-sm">연속 성공</div>
+              </div>
+              <div className="text-center p-3 bg-white/10 rounded-xl backdrop-blur-sm">
+                <div className="text-xl md:text-2xl font-bold text-yellow-400 flex items-center justify-center gap-1">
+                  <Trophy className="h-4 w-4 md:h-5 md:w-5" />
+                  {userProgress.maxStreak}
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-400">
-                    {userProgress.achievements.length}
-                  </div>
-                  <div className="text-white/80 text-sm">획득 칭호</div>
+                <div className="text-white/80 text-xs md:text-sm">최고 연속</div>
+              </div>
+              <div className="text-center p-3 bg-white/10 rounded-xl backdrop-blur-sm">
+                <div className="text-xl md:text-2xl font-bold text-purple-400 flex items-center justify-center gap-1">
+                  <Crown className="h-4 w-4 md:h-5 md:w-5" />
+                  {userProgress.achievements.length}
                 </div>
+                <div className="text-white/80 text-xs md:text-sm">획득 칭호</div>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Action Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <Card className="card-hover cursor-pointer" onClick={handleStartQuest}>
-            <CardHeader>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+          <Card className="card-hover cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl border-0 bg-gradient-to-br from-magic-50 to-magic-100" onClick={handleStartQuest}>
+            <CardHeader className="pb-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-magic-100 rounded-lg flex items-center justify-center">
-                  <Target className="h-6 w-6 text-magic-600" />
+                <div className="w-12 h-12 bg-magic-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <Target className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg">새로운 퀘스트</CardTitle>
-                  <CardDescription>실제 교실 상황으로 연습하기</CardDescription>
+                  <CardTitle className="text-lg text-magic-700">새로운 퀘스트</CardTitle>
+                  <CardDescription className="text-magic-600">실제 교실 상황으로 연습하기</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <Button className="w-full magic-gradient text-white hover:opacity-90">
+              <Button className="w-full magic-gradient text-white hover:opacity-90 rounded-xl font-semibold py-3 shadow-lg hover:shadow-xl transition-all">
                 <Zap className="h-4 w-4 mr-2" />
                 퀘스트 시작하기
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="card-hover cursor-pointer" onClick={() => setShowLibrary(true)}>
-            <CardHeader>
+          <Card className="card-hover cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl border-0 bg-gradient-to-br from-wisdom-50 to-wisdom-100" onClick={() => setShowLibrary(true)}>
+            <CardHeader className="pb-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-wisdom-100 rounded-lg flex items-center justify-center">
-                  <BookOpen className="h-6 w-6 text-wisdom-600" />
+                <div className="w-12 h-12 bg-wisdom-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <BookOpen className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg">프롬프트 저장소</CardTitle>
-                  <CardDescription>내가 작성한 프롬프트 모음</CardDescription>
+                  <CardTitle className="text-lg text-wisdom-700">프롬프트 저장소</CardTitle>
+                  <CardDescription className="text-wisdom-600">내가 작성한 프롬프트 모음</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full border-wisdom-200 text-wisdom-600 hover:bg-wisdom-50">
+              <Button variant="outline" className="w-full border-wisdom-300 text-wisdom-700 hover:bg-wisdom-50 rounded-xl font-semibold py-3 shadow-md hover:shadow-lg transition-all">
+                <Smile className="h-4 w-4 mr-2" />
                 저장소 열기
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="card-hover cursor-pointer" onClick={() => setShowAchievements(!showAchievements)}>
-            <CardHeader>
+          <Card className="card-hover cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl border-0 bg-gradient-to-br from-success-50 to-success-100 md:col-span-2 lg:col-span-1" onClick={() => setShowAchievements(!showAchievements)}>
+            <CardHeader className="pb-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-success-100 rounded-lg flex items-center justify-center">
-                  <Trophy className="h-6 w-6 text-success-600" />
+                <div className="w-12 h-12 bg-success-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <Trophy className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg">성취 및 칭호</CardTitle>
-                  <CardDescription>획득한 업적 확인하기</CardDescription>
+                  <CardTitle className="text-lg text-success-700">성취 및 칭호</CardTitle>
+                  <CardDescription className="text-success-600">획득한 업적 확인하기</CardDescription>
                 </div>
               </div>
             </CardHeader>
@@ -316,21 +326,21 @@ const Index = () => {
                 {userProgress.achievements.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {userProgress.achievements.slice(0, 2).map((achievement, index) => (
-                      <Badge key={index} variant="secondary" className="bg-magic-100 text-magic-700">
+                      <Badge key={index} variant="secondary" className="bg-success-200 text-success-800 rounded-full px-3 py-1">
                         <Crown className="h-3 w-3 mr-1" />
                         {achievement}
                       </Badge>
                     ))}
                     {userProgress.achievements.length > 2 && (
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-xs rounded-full border-success-300 text-success-700">
                         +{userProgress.achievements.length - 2}개 더
                       </Badge>
                     )}
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-500">퀘스트를 완료하여 칭호를 획득하세요!</p>
+                  <p className="text-sm text-success-600">퀘스트를 완료하여 칭호를 획득하세요!</p>
                 )}
-                <Button variant="ghost" size="sm" className="w-full mt-2">
+                <Button variant="ghost" size="sm" className="w-full mt-2 text-success-700 hover:bg-success-100 rounded-xl">
                   {showAchievements ? '숨기기' : '모든 칭호 보기'}
                 </Button>
               </div>
@@ -340,18 +350,18 @@ const Index = () => {
 
         {/* 칭호 상세 보기 */}
         {showAchievements && userProgress.achievements.length > 0 && (
-          <Card className="mb-8">
+          <Card className="mb-6 md:mb-8 shadow-lg rounded-2xl border-0 bg-gradient-to-r from-success-50 to-magic-50">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Medal className="h-5 w-5 text-success-600" />
+              <CardTitle className="flex items-center gap-2 text-success-700">
+                <Medal className="h-5 w-5" />
                 획득한 모든 칭호
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {userProgress.achievements.map((achievement, index) => (
-                  <Badge key={index} variant="secondary" className="bg-success-100 text-success-700 p-2 justify-center">
-                    <Trophy className="h-4 w-4 mr-1" />
+                  <Badge key={index} variant="secondary" className="bg-success-200 text-success-800 p-3 justify-center rounded-xl font-medium shadow-md">
+                    <Trophy className="h-4 w-4 mr-2" />
                     {achievement}
                   </Badge>
                 ))}
@@ -361,32 +371,35 @@ const Index = () => {
         )}
 
         {/* Recent Activity */}
-        <Card>
+        <Card className="shadow-lg rounded-2xl border-0 bg-gradient-to-br from-white to-magic-50">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-magic-600" />
+            <CardTitle className="flex items-center gap-2 text-magic-700">
+              <Sparkles className="h-5 w-5" />
               최근 활동
             </CardTitle>
           </CardHeader>
           <CardContent>
             {recentActivities.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 {recentActivities.map((activity: any, index: number) => (
-                  <div key={activity.id} className="flex items-center justify-between p-3 bg-success-50 rounded-lg">
-                    <div>
-                      <div className="font-medium">{activity.questTitle} 퀘스트 완료</div>
-                      <div className="text-sm text-gray-500">
+                  <div key={activity.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gradient-to-r from-success-50 to-magic-50 rounded-xl shadow-sm">
+                    <div className="mb-2 sm:mb-0">
+                      <div className="font-medium text-gray-800 flex items-center gap-2">
+                        <Star className="h-4 w-4 text-magic-500" />
+                        {activity.questTitle} 퀘스트 완료
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
                         {activity.score}점 획득 • {activity.score >= 90 ? 60 : activity.score >= 80 ? 50 : 40} 경험치
                         {activity.score >= 80 && <span className="text-orange-500 ml-2">🔥 성공!</span>}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 self-start sm:self-center">
                       <Badge 
                         className={`${
-                          activity.score >= 90 ? 'bg-purple-500' : 
-                          activity.score >= 80 ? 'bg-success-500' : 
-                          'bg-gray-500'
-                        } text-white`}
+                          activity.score >= 90 ? 'bg-purple-500 hover:bg-purple-600' : 
+                          activity.score >= 80 ? 'bg-success-500 hover:bg-success-600' : 
+                          'bg-gray-500 hover:bg-gray-600'
+                        } text-white rounded-full px-3 py-1 font-semibold shadow-md`}
                       >
                         {activity.score}점
                       </Badge>
@@ -395,10 +408,19 @@ const Index = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
-                <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">아직 완료한 퀘스트가 없습니다.</p>
-                <p className="text-sm text-gray-400 mt-1">첫 퀘스트를 시작해보세요!</p>
+              <div className="text-center py-8 md:py-12">
+                <div className="w-20 h-20 bg-magic-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Target className="h-10 w-10 text-magic-400" />
+                </div>
+                <p className="text-gray-600 font-medium mb-2">아직 완료한 퀘스트가 없습니다.</p>
+                <p className="text-sm text-gray-500">첫 퀘스트를 시작해보세요!</p>
+                <Button 
+                  onClick={handleStartQuest}
+                  className="mt-4 magic-gradient text-white rounded-xl px-6 py-2 shadow-lg hover:shadow-xl transition-all"
+                >
+                  <Zap className="h-4 w-4 mr-2" />
+                  퀘스트 시작하기
+                </Button>
               </div>
             )}
           </CardContent>

@@ -47,25 +47,120 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-gradient-to-br from-magic-50 via-wisdom-50 to-purple-50 text-foreground min-h-screen;
+    @apply bg-gradient-to-br from-pink-50 via-purple-50 to-magic-50 text-foreground min-h-screen;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   }
 }
 
 @layer components {
   .magic-gradient {
-    @apply bg-gradient-to-r from-magic-500 via-magic-600 to-wisdom-600;
+    @apply bg-gradient-to-r from-magic-400 via-magic-500 to-purple-500;
   }
   
   .wisdom-gradient {
-    @apply bg-gradient-to-r from-wisdom-500 to-magic-500;
+    @apply bg-gradient-to-r from-wisdom-400 via-wisdom-500 to-magic-400;
   }
   
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:scale-105;
+    @apply transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1;
   }
   
   .sparkle-text {
-    @apply bg-gradient-to-r from-magic-600 via-wisdom-600 to-magic-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-magic-600 via-purple-600 to-pink-600 bg-clip-text text-transparent;
   }
+
+  /* 모바일 친화적 애니메이션 */
+  @media (max-width: 768px) {
+    .card-hover {
+      @apply hover:scale-[1.01] hover:-translate-y-0.5;
+    }
+  }
+
+  /* 부드러운 그림자 효과 */
+  .soft-shadow {
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .soft-shadow-lg {
+    box-shadow: 0 10px 40px rgba(139, 92, 246, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* 러블리한 애니메이션 */
+  @keyframes bounce-gentle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  @keyframes wiggle {
+    0%, 7%, 100% { transform: rotate(0deg); }
+    15% { transform: rotate(-3deg); }
+    20% { transform: rotate(3deg); }
+  }
+
+  .bounce-gentle {
+    animation: bounce-gentle 2s ease-in-out infinite;
+  }
+
+  .pulse-soft {
+    animation: pulse-soft 2s ease-in-out infinite;
+  }
+
+  .wiggle {
+    animation: wiggle 1s ease-in-out;
+  }
+
+  /* 반응형 텍스트 */
+  .responsive-text {
+    @apply text-sm sm:text-base md:text-lg;
+  }
+
+  .responsive-title {
+    @apply text-lg sm:text-xl md:text-2xl lg:text-3xl;
+  }
+
+  /* 모바일 터치 친화적 버튼 */
+  .touch-friendly {
+    @apply min-h-[44px] min-w-[44px] touch-manipulation;
+  }
+}
+
+/* 스크롤바 스타일링 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #a855f7, #ec4899);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #9333ea, #db2777);
+}
+
+/* 모바일에서 스크롤바 숨기기 */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* 포커스 스타일 개선 */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-magic-500 rounded-lg;
+}
+
+/* 선택 텍스트 스타일 */
+::selection {
+  @apply bg-magic-200 text-magic-900;
 }
