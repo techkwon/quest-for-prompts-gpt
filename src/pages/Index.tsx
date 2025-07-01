@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -166,7 +167,7 @@ const Index = () => {
   const getStreakColor = (streak: number) => {
     if (streak >= 10) return 'text-red-300';
     if (streak >= 5) return 'text-orange-300';
-    if (streak >= 3) return 'text-yellow-300';
+    if (streak >= 3) return 'text-pink-300';
     return 'text-gray-400';
   };
 
@@ -174,7 +175,7 @@ const Index = () => {
     if (score >= 95) return 'text-purple-400';
     if (score >= 90) return 'text-blue-400';
     if (score >= 80) return 'text-green-400';
-    if (score >= 70) return 'text-yellow-400';
+    if (score >= 70) return 'text-pink-300';
     return 'text-gray-400';
   };
 
@@ -250,7 +251,7 @@ const Index = () => {
                 <div className="text-gray-600 text-xs md:text-sm">연속 성공</div>
               </div>
               <div className="text-center p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-                <div className="text-xl md:text-2xl font-bold text-yellow-300 flex items-center justify-center gap-1">
+                <div className="text-xl md:text-2xl font-bold text-pink-300 flex items-center justify-center gap-1">
                   <Trophy className="h-4 w-4 md:h-5 md:w-5" />
                   {userProgress.maxStreak}
                 </div>
@@ -390,7 +391,7 @@ const Index = () => {
                       </div>
                       <div className="text-sm text-gray-500 mt-1">
                         {activity.score}점 획득 • {activity.score >= 90 ? 60 : activity.score >= 80 ? 50 : 40} 경험치
-                        {activity.score >= 80 && <span className="text-orange-300 ml-2">🔥 성공!</span>}
+                        {activity.score >= 80 && <span className="text-pink-300 ml-2">🔥 성공!</span>}
                       </div>
                     </div>
                     <div className="flex items-center gap-2 self-start sm:self-center">

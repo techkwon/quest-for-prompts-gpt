@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -383,10 +384,10 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                     </div>
                     <Badge 
                       className={`${
-                        quest.difficulty === 'beginner' ? 'bg-green-300 hover:bg-green-400' : 
-                        quest.difficulty === 'intermediate' ? 'bg-orange-300 hover:bg-orange-400' : 
-                        'bg-red-300 hover:bg-red-400'
-                      } text-white border-0 rounded-full px-3 py-1`}
+                        quest.difficulty === 'beginner' ? 'bg-green-200 hover:bg-green-300 text-green-700' : 
+                        quest.difficulty === 'intermediate' ? 'bg-orange-200 hover:bg-orange-300 text-orange-700' : 
+                        'bg-red-200 hover:bg-red-300 text-red-700'
+                      } border-0 rounded-full px-3 py-1`}
                     >
                       {quest.difficulty === 'beginner' ? '초급' : 
                        quest.difficulty === 'intermediate' ? '중급' : '고급'}
@@ -504,18 +505,18 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-xl">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      feedback.score >= 80 ? 'bg-green-300' : feedback.score >= 60 ? 'bg-orange-300' : 'bg-red-300'
+                      feedback.score >= 80 ? 'bg-green-200' : feedback.score >= 60 ? 'bg-orange-200' : 'bg-red-200'
                     }`}>
                       {feedback.score >= 80 ? 
-                        <CheckCircle className="h-6 w-6 text-white" /> : 
-                        <XCircle className="h-6 w-6 text-white" />
+                        <CheckCircle className="h-6 w-6 text-green-600" /> : 
+                        <XCircle className="h-6 w-6 text-red-600" />
                       }
                     </div>
                     <span className="text-gray-700">
                       채점 결과: {feedback.score}점 / {feedback.maxScore}점
                     </span>
                     {feedback.score >= 80 && (
-                      <Badge className="bg-green-300 text-white border-0 rounded-full px-3 py-1">
+                      <Badge className="bg-green-200 text-green-700 border-0 rounded-full px-3 py-1">
                         우수!
                       </Badge>
                     )}
@@ -537,7 +538,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
 
                   {/* 개선점 */}
                   {feedback.improvements.length > 0 && (
-                    <div className="p-4 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl border border-orange-100">
+                    <div className="p-4 bg-gradient-to-r from-orange-50 to-pink-50 rounded-xl border border-orange-100">
                       <h4 className="font-semibold text-orange-600 mb-2 flex items-center gap-2">
                         <Lightbulb className="h-4 w-4" />
                         개선할 점:
