@@ -325,16 +325,16 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-purple-50 via-pink-50 to-magic-50 border-0 rounded-3xl shadow-2xl">
-        <DialogHeader className="border-b border-purple-200 pb-4 mb-6">
+        <DialogHeader className="border-b border-purple-100 pb-4 mb-6">
           <DialogTitle className="flex items-center gap-3 text-2xl font-bold">
-            <div className="w-10 h-10 bg-gradient-to-r from-magic-500 to-purple-500 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-r from-magic-300 to-purple-300 rounded-full flex items-center justify-center">
               <Target className="h-6 w-6 text-white" />
             </div>
-            <span className="bg-gradient-to-r from-magic-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-magic-500 to-purple-500 bg-clip-text text-transparent">
               {!questStarted ? '프롬프트 퀘스트' : currentQuest?.title}
             </span>
             {questStarted && (
-              <Badge className="bg-gradient-to-r from-magic-500 to-purple-500 text-white border-0 rounded-full px-3 py-1">
+              <Badge className="bg-gradient-to-r from-magic-300 to-purple-300 text-gray-700 border-0 rounded-full px-3 py-1">
                 레벨 {userLevel}
               </Badge>
             )}
@@ -344,29 +344,29 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
         {!questStarted ? (
           <div className="space-y-6">
             <div className="text-center py-8">
-              <div className="w-20 h-20 bg-gradient-to-r from-magic-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <div className="w-20 h-20 bg-gradient-to-r from-magic-300 to-purple-300 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Wand2 className="h-10 w-10 text-white animate-pulse" />
               </div>
-              <h3 className="text-2xl font-bold mb-3 bg-gradient-to-r from-magic-600 to-purple-600 bg-clip-text text-transparent">
+              <h3 className="text-2xl font-bold mb-3 bg-gradient-to-r from-magic-500 to-purple-500 bg-clip-text text-transparent">
                 랜덤 퀘스트 3개에 도전하세요!
               </h3>
-              <p className="text-gray-600 mb-6 text-lg flex items-center justify-center gap-2">
-                <Heart className="h-5 w-5 text-pink-500" />
+              <p className="text-gray-500 mb-6 text-lg flex items-center justify-center gap-2">
+                <Heart className="h-5 w-5 text-pink-300" />
                 문제 하나씩 풀고 피드백을 받아 실력을 향상시킬 수 있습니다
-                <Heart className="h-5 w-5 text-pink-500" />
+                <Heart className="h-5 w-5 text-pink-300" />
               </p>
               <Button 
                 onClick={generateQuest}
-                className="bg-gradient-to-r from-magic-500 to-purple-500 hover:from-magic-600 hover:to-purple-600 text-white px-8 py-3 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+                className="bg-gradient-to-r from-magic-300 to-purple-300 hover:from-magic-400 hover:to-purple-400 text-gray-700 hover:text-white px-8 py-3 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
               >
                 <Sparkles className="h-5 w-5 mr-2" />
                 퀘스트 시작하기
               </Button>
             </div>
 
-            <Card className="bg-gradient-to-r from-magic-100 to-purple-100 border-0 rounded-2xl shadow-lg">
+            <Card className="bg-gradient-to-r from-magic-50 to-purple-50 border-0 rounded-2xl shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-magic-700">
+                <CardTitle className="flex items-center gap-2 text-magic-600">
                   <BookOpen className="h-5 w-5" />
                   사용 가능한 퀘스트 미리보기:
                 </CardTitle>
@@ -375,17 +375,17 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                 {quests.slice(0, 6).map((quest, index) => (
                   <div key={quest.id} className="flex items-center justify-between p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-all">
                     <div>
-                      <div className="font-semibold text-gray-800 flex items-center gap-2">
-                        <div className="w-2 h-2 bg-gradient-to-r from-magic-500 to-purple-500 rounded-full"></div>
+                      <div className="font-semibold text-gray-700 flex items-center gap-2">
+                        <div className="w-2 h-2 bg-gradient-to-r from-magic-300 to-purple-300 rounded-full"></div>
                         {quest.title}
                       </div>
-                      <div className="text-sm text-gray-600 mt-1">{quest.description}</div>
+                      <div className="text-sm text-gray-500 mt-1">{quest.description}</div>
                     </div>
                     <Badge 
                       className={`${
-                        quest.difficulty === 'beginner' ? 'bg-green-500 hover:bg-green-600' : 
-                        quest.difficulty === 'intermediate' ? 'bg-orange-500 hover:bg-orange-600' : 
-                        'bg-red-500 hover:bg-red-600'
+                        quest.difficulty === 'beginner' ? 'bg-green-300 hover:bg-green-400' : 
+                        quest.difficulty === 'intermediate' ? 'bg-orange-300 hover:bg-orange-400' : 
+                        'bg-red-300 hover:bg-red-400'
                       } text-white border-0 rounded-full px-3 py-1`}
                     >
                       {quest.difficulty === 'beginner' ? '초급' : 
@@ -401,32 +401,32 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
             {/* Progress Bar */}
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-gray-600">
                   문제 {currentProblemIndex + 1} / {currentQuest.problems.length}
                 </span>
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-gray-500">
                   {problemScores.length > 0 && `평균: ${Math.round(problemScores.reduce((a, b) => a + b, 0) / problemScores.length)}점`}
                 </span>
               </div>
               <Progress 
                 value={((currentProblemIndex) / currentQuest.problems.length) * 100} 
-                className="h-3 bg-gray-200 rounded-full overflow-hidden"
+                className="h-3 bg-gray-100 rounded-full overflow-hidden"
               />
             </div>
 
             {/* Current Problem */}
             <Card className="bg-gradient-to-br from-white to-magic-50 border-0 rounded-2xl shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl text-magic-700">
-                  <div className="w-8 h-8 bg-gradient-to-r from-magic-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                <CardTitle className="flex items-center gap-2 text-xl text-magic-600">
+                  <div className="w-8 h-8 bg-gradient-to-r from-magic-300 to-purple-300 rounded-full flex items-center justify-center text-white text-sm font-bold">
                     {currentProblemIndex + 1}
                   </div>
                   {currentQuest.problems[currentProblemIndex].question}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200">
-                  <p className="text-gray-700 leading-relaxed">
+                <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100">
+                  <p className="text-gray-600 leading-relaxed">
                     {currentQuest.problems[currentProblemIndex].context}
                   </p>
                 </div>
@@ -436,21 +436,21 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                     variant="outline" 
                     size="sm" 
                     onClick={() => setShowHints(true)}
-                    className="border-magic-300 text-magic-700 hover:bg-magic-50 rounded-xl"
+                    className="border-magic-200 text-magic-600 hover:bg-magic-50 rounded-xl"
                   >
                     <Lightbulb className="h-4 w-4 mr-2" />
                     힌트 보기
                   </Button>
                 ) : (
                   <div className="space-y-2">
-                    <h4 className="font-semibold text-magic-700 flex items-center gap-2">
+                    <h4 className="font-semibold text-magic-600 flex items-center gap-2">
                       <Lightbulb className="h-4 w-4" />
                       힌트:
                     </h4>
                     <ul className="space-y-2">
                       {currentQuest.problems[currentProblemIndex].hints.map((hint, index) => (
-                        <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
-                          <span className="w-5 h-5 bg-magic-200 rounded-full flex items-center justify-center text-magic-700 text-xs font-bold mt-0.5 flex-shrink-0">
+                        <li key={index} className="flex items-start gap-2 text-sm text-gray-500">
+                          <span className="w-5 h-5 bg-magic-100 rounded-full flex items-center justify-center text-magic-600 text-xs font-bold mt-0.5 flex-shrink-0">
                             {index + 1}
                           </span>
                           {hint}
@@ -465,14 +465,14 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
             {/* Prompt Input */}
             <Card className="bg-white border-0 rounded-2xl shadow-lg">
               <CardHeader>
-                <CardTitle className="text-lg text-gray-800">프롬프트 작성하기</CardTitle>
+                <CardTitle className="text-lg text-gray-700">프롬프트 작성하기</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Textarea
                   value={userPrompt}
                   onChange={(e) => setUserPrompt(e.target.value)}
                   placeholder="AI에게 요청할 프롬프트를 작성해주세요..."
-                  className="min-h-32 border-gray-200 rounded-xl focus:border-magic-500 focus:ring-magic-500"
+                  className="min-h-32 border-gray-100 rounded-xl focus:border-magic-300 focus:ring-magic-300"
                   disabled={isEvaluating || !!feedback}
                 />
                 
@@ -480,11 +480,11 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                   <Button 
                     onClick={handleSubmitPrompt}
                     disabled={isEvaluating || !userPrompt.trim()}
-                    className="w-full bg-gradient-to-r from-magic-500 to-purple-500 hover:from-magic-600 hover:to-purple-600 text-white rounded-xl py-3 font-semibold shadow-lg hover:shadow-xl transition-all"
+                    className="w-full bg-gradient-to-r from-magic-300 to-purple-300 hover:from-magic-400 hover:to-purple-400 text-gray-700 hover:text-white rounded-xl py-3 font-semibold shadow-lg hover:shadow-xl transition-all"
                   >
                     {isEvaluating ? (
                       <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-gray-700 border-t-transparent rounded-full animate-spin"></div>
                         평가 중...
                       </div>
                     ) : (
@@ -504,18 +504,18 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-xl">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      feedback.score >= 80 ? 'bg-green-500' : feedback.score >= 60 ? 'bg-orange-500' : 'bg-red-500'
+                      feedback.score >= 80 ? 'bg-green-300' : feedback.score >= 60 ? 'bg-orange-300' : 'bg-red-300'
                     }`}>
                       {feedback.score >= 80 ? 
                         <CheckCircle className="h-6 w-6 text-white" /> : 
                         <XCircle className="h-6 w-6 text-white" />
                       }
                     </div>
-                    <span className="text-gray-800">
+                    <span className="text-gray-700">
                       채점 결과: {feedback.score}점 / {feedback.maxScore}점
                     </span>
                     {feedback.score >= 80 && (
-                      <Badge className="bg-green-500 text-white border-0 rounded-full px-3 py-1">
+                      <Badge className="bg-green-300 text-white border-0 rounded-full px-3 py-1">
                         우수!
                       </Badge>
                     )}
@@ -523,60 +523,60 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* 강점 */}
-                  <div className="p-4 bg-gradient-to-r from-green-50 to-success-50 rounded-xl border border-green-200">
-                    <h4 className="font-semibold text-green-700 mb-2 flex items-center gap-2">
+                  <div className="p-4 bg-gradient-to-r from-green-50 to-success-50 rounded-xl border border-green-100">
+                    <h4 className="font-semibold text-green-600 mb-2 flex items-center gap-2">
                       <CheckCircle className="h-4 w-4" />
                       잘한 점:
                     </h4>
                     <ul className="space-y-1">
                       {feedback.strengths.map((strength: string, index: number) => (
-                        <li key={index} className="text-green-600 text-sm">• {strength}</li>
+                        <li key={index} className="text-green-500 text-sm">• {strength}</li>
                       ))}
                     </ul>
                   </div>
 
                   {/* 개선점 */}
                   {feedback.improvements.length > 0 && (
-                    <div className="p-4 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl border border-orange-200">
-                      <h4 className="font-semibold text-orange-700 mb-2 flex items-center gap-2">
+                    <div className="p-4 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl border border-orange-100">
+                      <h4 className="font-semibold text-orange-600 mb-2 flex items-center gap-2">
                         <Lightbulb className="h-4 w-4" />
                         개선할 점:
                       </h4>
                       <ul className="space-y-1">
                         {feedback.improvements.map((improvement: string, index: number) => (
-                          <li key={index} className="text-orange-600 text-sm">• {improvement}</li>
+                          <li key={index} className="text-orange-500 text-sm">• {improvement}</li>
                         ))}
                       </ul>
                     </div>
                   )}
 
                   {/* 개선된 프롬프트 */}
-                  <div className="p-4 bg-gradient-to-r from-magic-50 to-purple-50 rounded-xl border border-magic-200">
-                    <h4 className="font-semibold text-magic-700 mb-2 flex items-center gap-2">
+                  <div className="p-4 bg-gradient-to-r from-magic-50 to-purple-50 rounded-xl border border-magic-100">
+                    <h4 className="font-semibold text-magic-600 mb-2 flex items-center gap-2">
                       <Wand2 className="h-4 w-4" />
                       개선된 프롬프트 예시:
                     </h4>
-                    <p className="text-magic-600 text-sm bg-white p-3 rounded-lg border border-magic-200 italic">
+                    <p className="text-magic-500 text-sm bg-white p-3 rounded-lg border border-magic-100 italic">
                       "{feedback.enhancedPrompt}"
                     </p>
                   </div>
 
                   {/* 팁 */}
-                  <div className="p-4 bg-gradient-to-r from-blue-50 to-wisdom-50 rounded-xl border border-blue-200">
-                    <h4 className="font-semibold text-blue-700 mb-2 flex items-center gap-2">
+                  <div className="p-4 bg-gradient-to-r from-blue-50 to-wisdom-50 rounded-xl border border-blue-100">
+                    <h4 className="font-semibold text-blue-500 mb-2 flex items-center gap-2">
                       <Trophy className="h-4 w-4" />
                       프롬프트 작성 팁:
                     </h4>
                     <ul className="space-y-1">
                       {feedback.tips.map((tip: string, index: number) => (
-                        <li key={index} className="text-blue-600 text-sm">💡 {tip}</li>
+                        <li key={index} className="text-blue-400 text-sm">💡 {tip}</li>
                       ))}
                     </ul>
                   </div>
 
                   <Button 
                     onClick={handleNextProblem}
-                    className="w-full bg-gradient-to-r from-magic-500 to-purple-500 hover:from-magic-600 hover:to-purple-600 text-white rounded-xl py-3 font-semibold shadow-lg hover:shadow-xl transition-all"
+                    className="w-full bg-gradient-to-r from-magic-300 to-purple-300 hover:from-magic-400 hover:to-purple-400 text-gray-700 hover:text-white rounded-xl py-3 font-semibold shadow-lg hover:shadow-xl transition-all"
                   >
                     {currentProblemIndex < currentQuest.problems.length - 1 ? (
                       <div className="flex items-center gap-2">

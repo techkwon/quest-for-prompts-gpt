@@ -18,7 +18,7 @@ All colors MUST be HSL.
     --popover: 255 255 255;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 270 91% 65%;
+    --primary: 270 50% 80%;
     --primary-foreground: 255 255 255;
 
     --secondary: 210 40% 96.1%;
@@ -27,15 +27,15 @@ All colors MUST be HSL.
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 270 91% 65%;
+    --accent: 270 50% 80%;
     --accent-foreground: 255 255 255;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 40% 75%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 270 91% 65%;
+    --ring: 270 50% 80%;
 
     --radius: 0.5rem;
   }
@@ -54,11 +54,11 @@ All colors MUST be HSL.
 
 @layer components {
   .magic-gradient {
-    @apply bg-gradient-to-r from-magic-400 via-magic-500 to-purple-500;
+    @apply bg-gradient-to-r from-magic-200 via-magic-300 to-purple-200;
   }
   
   .wisdom-gradient {
-    @apply bg-gradient-to-r from-wisdom-400 via-wisdom-500 to-magic-400;
+    @apply bg-gradient-to-r from-wisdom-200 via-wisdom-300 to-magic-200;
   }
   
   .card-hover {
@@ -66,7 +66,7 @@ All colors MUST be HSL.
   }
   
   .sparkle-text {
-    @apply bg-gradient-to-r from-magic-600 via-purple-600 to-pink-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-magic-400 via-purple-400 to-pink-400 bg-clip-text text-transparent;
   }
 
   /* 모바일 친화적 애니메이션 */
@@ -78,11 +78,11 @@ All colors MUST be HSL.
 
   /* 부드러운 그림자 효과 */
   .soft-shadow {
-    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
   }
 
   .soft-shadow-lg {
-    box-shadow: 0 10px 40px rgba(139, 92, 246, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 40px rgba(139, 92, 246, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
   }
 
   /* 러블리한 애니메이션 */
@@ -140,12 +140,12 @@ All colors MUST be HSL.
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #a855f7, #ec4899);
+  background: linear-gradient(to bottom, #ddd6fe, #fce7f3);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #9333ea, #db2777);
+  background: linear-gradient(to bottom, #c4b5fd, #fbcfe8);
 }
 
 /* 모바일에서 스크롤바 숨기기 */
@@ -157,10 +157,10 @@ All colors MUST be HSL.
 
 /* 포커스 스타일 개선 */
 *:focus-visible {
-  @apply outline-2 outline-offset-2 outline-magic-500 rounded-lg;
+  @apply outline-2 outline-offset-2 outline-magic-300 rounded-lg;
 }
 
 /* 선택 텍스트 스타일 */
 ::selection {
-  @apply bg-magic-200 text-magic-900;
+  @apply bg-magic-100 text-magic-700;
 }
