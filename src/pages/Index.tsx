@@ -165,17 +165,17 @@ const Index = () => {
   const recentActivities = getRecentActivities();
 
   const getStreakColor = (streak: number) => {
-    if (streak >= 10) return 'text-red-300';
-    if (streak >= 5) return 'text-orange-300';
-    if (streak >= 3) return 'text-pink-300';
+    if (streak >= 10) return 'text-pink-400';
+    if (streak >= 5) return 'text-purple-400';
+    if (streak >= 3) return 'text-magic-400';
     return 'text-gray-400';
   };
 
   const getAverageScoreColor = (score: number) => {
     if (score >= 95) return 'text-purple-400';
-    if (score >= 90) return 'text-blue-400';
-    if (score >= 80) return 'text-green-400';
-    if (score >= 70) return 'text-pink-300';
+    if (score >= 90) return 'text-magic-400';
+    if (score >= 80) return 'text-success-400';
+    if (score >= 70) return 'text-pink-400';
     return 'text-gray-400';
   };
 
@@ -216,7 +216,7 @@ const Index = () => {
               </div>
               <div className="text-center">
                 <div className="text-2xl md:text-3xl font-bold flex items-center gap-1">
-                  <Star className="h-5 w-5 md:h-6 md:w-6 text-yellow-300" />
+                  <Star className="h-5 w-5 md:h-6 md:w-6 text-purple-300" />
                   {userProgress.totalScore}
                 </div>
                 <div className="text-gray-600 text-sm">총 점수</div>
@@ -386,7 +386,7 @@ const Index = () => {
                   <div key={activity.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gradient-to-r from-success-50 to-magic-50 rounded-xl shadow-sm">
                     <div className="mb-2 sm:mb-0">
                       <div className="font-medium text-gray-700 flex items-center gap-2">
-                        <Star className="h-4 w-4 text-magic-400" />
+                        <Star className="h-4 w-4 text-purple-400" />
                         {activity.questTitle} 퀘스트 완료
                       </div>
                       <div className="text-sm text-gray-500 mt-1">

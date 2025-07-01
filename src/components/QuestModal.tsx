@@ -384,9 +384,9 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                     </div>
                     <Badge 
                       className={`${
-                        quest.difficulty === 'beginner' ? 'bg-green-200 hover:bg-green-300 text-green-700' : 
-                        quest.difficulty === 'intermediate' ? 'bg-orange-200 hover:bg-orange-300 text-orange-700' : 
-                        'bg-red-200 hover:bg-red-300 text-red-700'
+                        quest.difficulty === 'beginner' ? 'bg-success-200 hover:bg-success-300 text-success-700' : 
+                        quest.difficulty === 'intermediate' ? 'bg-wisdom-200 hover:bg-wisdom-300 text-wisdom-700' : 
+                        'bg-magic-200 hover:bg-magic-300 text-magic-700'
                       } border-0 rounded-full px-3 py-1`}
                     >
                       {quest.difficulty === 'beginner' ? '초급' : 
@@ -505,18 +505,18 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-xl">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      feedback.score >= 80 ? 'bg-green-200' : feedback.score >= 60 ? 'bg-orange-200' : 'bg-red-200'
+                      feedback.score >= 80 ? 'bg-success-200' : feedback.score >= 60 ? 'bg-wisdom-200' : 'bg-pink-200'
                     }`}>
                       {feedback.score >= 80 ? 
-                        <CheckCircle className="h-6 w-6 text-green-600" /> : 
-                        <XCircle className="h-6 w-6 text-red-600" />
+                        <CheckCircle className="h-6 w-6 text-success-600" /> : 
+                        <XCircle className="h-6 w-6 text-pink-600" />
                       }
                     </div>
                     <span className="text-gray-700">
                       채점 결과: {feedback.score}점 / {feedback.maxScore}점
                     </span>
                     {feedback.score >= 80 && (
-                      <Badge className="bg-green-200 text-green-700 border-0 rounded-full px-3 py-1">
+                      <Badge className="bg-success-200 text-success-700 border-0 rounded-full px-3 py-1">
                         우수!
                       </Badge>
                     )}
@@ -524,28 +524,28 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* 강점 */}
-                  <div className="p-4 bg-gradient-to-r from-green-50 to-success-50 rounded-xl border border-green-100">
-                    <h4 className="font-semibold text-green-600 mb-2 flex items-center gap-2">
+                  <div className="p-4 bg-gradient-to-r from-success-50 to-magic-50 rounded-xl border border-success-100">
+                    <h4 className="font-semibold text-success-600 mb-2 flex items-center gap-2">
                       <CheckCircle className="h-4 w-4" />
                       잘한 점:
                     </h4>
                     <ul className="space-y-1">
                       {feedback.strengths.map((strength: string, index: number) => (
-                        <li key={index} className="text-green-500 text-sm">• {strength}</li>
+                        <li key={index} className="text-success-500 text-sm">• {strength}</li>
                       ))}
                     </ul>
                   </div>
 
                   {/* 개선점 */}
                   {feedback.improvements.length > 0 && (
-                    <div className="p-4 bg-gradient-to-r from-orange-50 to-pink-50 rounded-xl border border-orange-100">
-                      <h4 className="font-semibold text-orange-600 mb-2 flex items-center gap-2">
+                    <div className="p-4 bg-gradient-to-r from-wisdom-50 to-pink-50 rounded-xl border border-wisdom-100">
+                      <h4 className="font-semibold text-wisdom-600 mb-2 flex items-center gap-2">
                         <Lightbulb className="h-4 w-4" />
                         개선할 점:
                       </h4>
                       <ul className="space-y-1">
                         {feedback.improvements.map((improvement: string, index: number) => (
-                          <li key={index} className="text-orange-500 text-sm">• {improvement}</li>
+                          <li key={index} className="text-wisdom-500 text-sm">• {improvement}</li>
                         ))}
                       </ul>
                     </div>
@@ -563,14 +563,14 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                   </div>
 
                   {/* 팁 */}
-                  <div className="p-4 bg-gradient-to-r from-blue-50 to-wisdom-50 rounded-xl border border-blue-100">
-                    <h4 className="font-semibold text-blue-500 mb-2 flex items-center gap-2">
+                  <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100">
+                    <h4 className="font-semibold text-purple-600 mb-2 flex items-center gap-2">
                       <Trophy className="h-4 w-4" />
                       프롬프트 작성 팁:
                     </h4>
                     <ul className="space-y-1">
                       {feedback.tips.map((tip: string, index: number) => (
-                        <li key={index} className="text-blue-400 text-sm">💡 {tip}</li>
+                        <li key={index} className="text-purple-500 text-sm">💡 {tip}</li>
                       ))}
                     </ul>
                   </div>
