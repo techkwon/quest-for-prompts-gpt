@@ -71,9 +71,9 @@ const PromptLibrary: React.FC<PromptLibraryProps> = ({ isOpen, onClose }) => {
   );
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-yellow-600 bg-yellow-100';
+    if (score >= 90) return 'text-purple-600 bg-purple-100';
     if (score >= 80) return 'text-success-600 bg-success-100';
-    if (score >= 70) return 'text-blue-600 bg-blue-100';
+    if (score >= 70) return 'text-pink-600 bg-pink-100';
     return 'text-gray-600 bg-gray-100';
   };
 
@@ -191,7 +191,7 @@ const PromptLibrary: React.FC<PromptLibraryProps> = ({ isOpen, onClose }) => {
                         </div>
                         <div className="flex items-center gap-2">
                           {selectedPrompt.score >= 90 ? (
-                            <Star className="h-5 w-5 text-yellow-500" />
+                            <Star className="h-5 w-5 text-purple-500" />
                           ) : selectedPrompt.score >= 80 ? (
                             <Star className="h-5 w-5 text-success-500" />
                           ) : (
@@ -237,16 +237,16 @@ const PromptLibrary: React.FC<PromptLibraryProps> = ({ isOpen, onClose }) => {
                   </Card>
 
                   {/* Improvements */}
-                  <Card className="border-yellow-200 bg-yellow-50">
+                  <Card className="border-pink-200 bg-pink-50">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-base text-yellow-700">개선할 점</CardTitle>
+                      <CardTitle className="text-base text-pink-700">개선할 점</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-2">
                         {selectedPrompt.feedback.improvements.map((improvement, index) => (
                           <li key={index} className="flex items-start gap-2">
-                            <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2 flex-shrink-0" />
-                            <span className="text-yellow-700 text-sm">{improvement}</span>
+                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2 flex-shrink-0" />
+                            <span className="text-pink-700 text-sm">{improvement}</span>
                           </li>
                         ))}
                       </ul>
