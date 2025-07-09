@@ -100,14 +100,14 @@ const PromptLibrary: React.FC<PromptLibraryProps> = ({ isOpen, onClose }) => {
                   placeholder="프롬프트 검색..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 bg-white"
                 />
               </div>
             </div>
 
             <div className="flex-1 overflow-y-auto space-y-3">
               {filteredPrompts.length === 0 ? (
-                <Card className="text-center py-8">
+                <Card className="text-center py-8 bg-white">
                   <CardContent>
                     <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-500">
