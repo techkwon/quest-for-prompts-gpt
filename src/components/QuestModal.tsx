@@ -437,7 +437,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                     variant="outline" 
                     size="sm" 
                     onClick={() => setShowHints(true)}
-                    className="border-magic-200 text-magic-600 hover:bg-magic-50 rounded-xl"
+                    className="border-magic-200 text-magic-600 hover:bg-magic-50 bg-white rounded-xl"
                   >
                     <Lightbulb className="h-4 w-4 mr-2" />
                     힌트 보기
@@ -473,7 +473,7 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
                   value={userPrompt}
                   onChange={(e) => setUserPrompt(e.target.value)}
                   placeholder="AI에게 요청할 프롬프트를 작성해주세요..."
-                  className="min-h-32 border-gray-100 rounded-xl focus:border-magic-300 focus:ring-magic-300"
+                  className="min-h-32 border-gray-100 rounded-xl focus:border-magic-300 focus:ring-magic-300 bg-white"
                   disabled={isEvaluating || !!feedback}
                 />
                 

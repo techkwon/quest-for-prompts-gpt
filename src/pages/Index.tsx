@@ -303,7 +303,7 @@ const Index = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full border-wisdom-200 text-wisdom-600 hover:bg-wisdom-50 rounded-xl font-semibold py-3 shadow-md hover:shadow-lg transition-all">
+              <Button variant="outline" className="w-full border-wisdom-200 text-wisdom-600 hover:bg-wisdom-50 bg-white rounded-xl font-semibold py-3 shadow-md hover:shadow-lg transition-all">
                 <Smile className="h-4 w-4 mr-2" />
                 저장소 열기
               </Button>
