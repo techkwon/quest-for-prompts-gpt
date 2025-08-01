@@ -101,6 +101,16 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
   const evaluatePrompt = (prompt: string, problem: Problem): number => {
     let score = 0;
     const lowerPrompt = prompt.toLowerCase();
+    const lowerQuestion = problem.question.toLowerCase();
+    const lowerContext = problem.context.toLowerCase();
+    
+    // 문제나 맥락을 그대로 복사했는지 확인 (0점 처리)
+    const questionSimilarity = calculateSimilarity(lowerPrompt, lowerQuestion);
+    const contextSimilarity = calculateSimilarity(lowerPrompt, lowerContext);
+    
+    if (questionSimilarity > 0.7 || contextSimilarity > 0.5) {
+      return 0; // 문제를 그대로 복사한 경우 0점
+    }
     
     // 기본 점수 (프롬프트가 비어있지 않으면)
     if (prompt.trim().length > 10) {
@@ -145,6 +155,13 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
     }
     
     return Math.min(score, problem.maxScore);
+  };
+
+  const calculateSimilarity = (text1: string, text2: string): number => {
+    const words1 = text1.split(/\s+/);
+    const words2 = text2.split(/\s+/);
+    const commonWords = words1.filter(word => word.length > 2 && words2.includes(word));
+    return commonWords.length / Math.max(words1.length, words2.length);
   };
 
   const generateStrengths = (prompt: string, score: number): string[] => {
@@ -315,6 +332,24 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
           },
           sampleAnswer: '중학교 2학년 수학 수업에서 학습 동기가 낮은 학생들의 흥미를 높이기 위한 게임화된 학습 방법을 3가지 제안해주세요. 각 방법은 일상생활과 연결된 실용적인 예시를 포함하고, 학생들이 성취감을 느낄 수 있는 단계별 목표를 제시해주세요.',
           maxScore: 100
+        },
+        {
+          id: 'behavior-management',
+          question: '수업 시간 산만한 학생 관리법',
+          context: '초등학교 4학년 교실에서 몇몇 학생들이 수업 시간에 자주 떠들거나 딴짓을 하여 다른 학생들의 학습을 방해합니다. 이런 상황을 개선할 수 있는 AI 어시스턴트를 위한 프롬프트를 작성하세요.',
+          hints: [
+            '구체적인 행동 문제를 명시해보세요',
+            '긍정적인 해결 방안을 요청해보세요',
+            '예방책과 대응책을 모두 포함해보세요'
+          ],
+          evaluationCriteria: {
+            clarity: '문제 상황과 해결 방향이 명확한가?',
+            specificity: '학생 연령과 구체적 행동이 명시되어 있는가?',
+            context: '교실 환경과 영향을 고려했는가?',
+            creativity: '다양하고 실용적인 접근법을 요청하는가?'
+          },
+          sampleAnswer: '초등학교 4학년 교실에서 수업 중 떠드는 학생들을 관리하기 위한 긍정적 행동 지원 전략을 5가지 제안해주세요. 각 전략은 예방적 접근과 즉시 대응 방법을 포함하고, 학생들의 자기조절 능력을 기를 수 있는 방법이어야 합니다.',
+          maxScore: 100
         }
       ]
     },
@@ -342,6 +377,24 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
           },
           sampleAnswer: '고등학교 1학년 영어 수업에서 학생들의 영어 실력을 초급, 중급, 고급의 세 단계로 나누고, 각 수준별로 개별 학습 목표를 설정하고, 맞춤형 학습 활동을 3가지씩 제안하는 AI 튜터를 만들어주세요. AI 튜터는 각 학생의 학습 진도를 추적하고, 필요에 따라 추가적인 학습 자료를 제공해야 합니다.',
           maxScore: 100
+        },
+        {
+          id: 'interactive-science',
+          question: '실험 중심 과학 수업 설계',
+          context: '중학교 3학년 화학 단원에서 학생들이 직접 실험을 통해 학습할 수 있는 수업을 계획하고 있습니다. 안전하면서도 흥미로운 실험 활동을 제안하고 지도할 수 있는 AI 실험 도우미를 위한 프롬프트를 작성하세요.',
+          hints: [
+            '실험 안전 수칙을 포함해보세요',
+            '단계별 실험 절차를 요청해보세요',
+            '실험 결과 해석 방법을 포함해보세요'
+          ],
+          evaluationCriteria: {
+            clarity: '실험 목표와 절차가 명확한가?',
+            specificity: '화학 단원과 안전 요구사항이 구체적인가?',
+            context: '중학생 수준에 적합한 난이도인가?',
+            creativity: '흥미롭고 교육적인 실험을 요청하는가?'
+          },
+          sampleAnswer: '중학교 3학년 화학 수업에서 산염기 반응을 주제로 한 안전한 실험 3가지를 설계하고, 각 실험의 준비물, 안전 수칙, 단계별 절차, 예상 결과, 교육적 의미를 상세히 설명해주세요. 학생들이 실험 과정에서 과학적 사고력을 기를 수 있는 질문들도 포함해주세요.',
+          maxScore: 100
         }
       ]
     },
@@ -368,6 +421,105 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
             creativity: 'AI 평가 전문가가 창의적이고 혁신적인 평가 방식을 제안하도록 요청하고 있는가?'
           },
           sampleAnswer: '고등학교 2학년 과학 수업에서 학생들이 팀을 이루어 과학 프로젝트를 수행하고, 프로젝트 결과물을 발표하는 평가 방식을 설계해주세요. 학생들은 동료 평가, 자기 평가, 교사 평가를 통해 점수를 받게 되며, 창의성, 협동심, 문제 해결 능력, 발표 능력 등을 평가 기준으로 활용합니다. AI 평가 전문가는 학생들이 평가 과정에 적극적으로 참여하고, 서로 협력하여 학습할 수 있도록 평가 도구와 가이드라인을 제공해야 합니다.',
+          maxScore: 100
+        }
+      ]
+    },
+    {
+      id: 'digital-literacy-4',
+      title: 'AI 시대 디지털 리터러시',
+      description: '학생들의 AI 활용 능력을 기르는 수업을 설계하세요',
+      difficulty: 'beginner',
+      category: '디지털 교육',
+      problems: [
+        {
+          id: 'ai-prompt-education',
+          question: '학생용 AI 프롬프트 교육',
+          context: '고등학교 1학년 학생들에게 AI를 올바르게 활용하는 방법을 가르치려고 합니다. 특히 효과적인 프롬프트 작성법을 교육하여 학습 도구로서 AI를 활용할 수 있도록 지도하는 AI 교육 전문가를 위한 프롬프트를 작성하세요.',
+          hints: [
+            '학생들의 수준에 맞는 AI 활용법을 포함하세요',
+            '윤리적 AI 사용법을 강조하세요',
+            '실습 활동을 포함한 단계별 교육을 요청하세요'
+          ],
+          evaluationCriteria: {
+            clarity: 'AI 교육 목표와 방법이 명확한가?',
+            specificity: '프롬프트 작성 기법이 구체적으로 제시되는가?',
+            context: '고등학생 수준에 적합한 내용인가?',
+            creativity: '실용적이고 윤리적인 AI 활용을 강조하는가?'
+          },
+          sampleAnswer: '고등학교 1학년 학생들을 대상으로 AI 프롬프트 작성의 기초부터 고급 기법까지 단계별로 교육하는 4주차 커리큘럼을 설계해주세요. 각 주차별로 이론 설명, 실습 활동, 윤리적 사용법을 포함하고, 학생들이 학습에 AI를 효과적으로 활용할 수 있는 구체적인 예시를 제공해주세요.',
+          maxScore: 100
+        },
+        {
+          id: 'coding-basics',
+          question: '초보자를 위한 프로그래밍 입문',
+          context: '중학교 2학년 학생들에게 처음으로 프로그래밍을 가르치려고 합니다. 스크래치나 블록 코딩을 활용하여 논리적 사고력을 기르고, 컴퓨팅 사고력을 개발할 수 있는 AI 코딩 튜터를 위한 프롬프트를 작성하세요.',
+          hints: [
+            '연령에 적합한 프로그래밍 도구를 선택하세요',
+            '단계별 학습 계획을 포함하세요',
+            '재미있는 프로젝트 활동을 요청하세요'
+          ],
+          evaluationCriteria: {
+            clarity: '학습 목표와 교육 방법이 명확한가?',
+            specificity: '사용할 도구와 교육 과정이 구체적인가?',
+            context: '중학생 수준에 적합한 난이도인가?',
+            creativity: '흥미로운 프로젝트와 활동을 포함하는가?'
+          },
+          sampleAnswer: '중학교 2학년 학생들을 위한 스크래치 기반 프로그래밍 입문 과정을 8주간 설계해주세요. 각 주차별로 핵심 개념, 실습 프로젝트, 창의적 과제를 포함하고, 학생들이 간단한 게임이나 애니메이션을 만들 수 있도록 단계별 가이드를 제공해주세요.',
+          maxScore: 100
+        }
+      ]
+    },
+    {
+      id: 'inclusive-education-5',
+      title: '포용적 교육 설계',
+      description: '모든 학생이 참여할 수 있는 수업을 만들어보세요',
+      difficulty: 'intermediate',
+      category: '포용교육',
+      problems: [
+        {
+          id: 'special-needs-support',
+          question: '특수교육 대상 학생 지원',
+          context: '일반 학급에 발달장애가 있는 학생이 통합되어 수업을 받고 있습니다. 이 학생이 다른 학생들과 함께 의미 있는 학습 경험을 할 수 있도록 지원하는 AI 보조교사를 위한 프롬프트를 작성하세요.',
+          hints: [
+            '개별 맞춤형 지원 방법을 포함하세요',
+            '다른 학생들과의 상호작용을 고려하세요',
+            '구체적인 교수법을 요청하세요'
+          ],
+          evaluationCriteria: {
+            clarity: '지원 목표와 방법이 명확한가?',
+            specificity: '발달장애 학생의 특성을 고려했는가?',
+            context: '통합교육 환경을 이해하고 있는가?',
+            creativity: '포용적이고 효과적인 교수법을 요청하는가?'
+          },
+          sampleAnswer: '일반 학급에 통합된 발달장애 학생을 위한 개별화 교육 지원 계획을 수립해주세요. 학생의 강점과 어려움을 파악하고, 수업 참여를 높이는 교수적 수정사항, 또래와의 협력 활동, 평가 방법의 조정을 포함한 종합적인 지원 전략을 제시해주세요.',
+          maxScore: 100
+        }
+      ]
+    },
+    {
+      id: 'steam-education-6',
+      title: 'STEAM 융합교육',
+      description: '과학, 기술, 공학, 예술, 수학을 융합한 창의적 수업을 설계하세요',
+      difficulty: 'advanced',
+      category: 'STEAM',
+      problems: [
+        {
+          id: 'environmental-project',
+          question: '환경보호 융합 프로젝트',
+          context: '고등학교에서 환경보호를 주제로 한 STEAM 프로젝트를 진행하려고 합니다. 학생들이 과학적 지식, 기술적 해결책, 예술적 표현을 모두 활용하여 환경 문제를 해결하는 창의적 프로젝트를 설계하는 AI STEAM 코디네이터를 위한 프롬프트를 작성하세요.',
+          hints: [
+            '5개 영역의 융합 방법을 구체적으로 제시하세요',
+            '실제 환경 문제와 연결하세요',
+            '학생 주도적 활동을 강조하세요'
+          ],
+          evaluationCriteria: {
+            clarity: '프로젝트 목표와 진행 방식이 명확한가?',
+            specificity: 'STEAM 각 영역의 역할이 구체적인가?',
+            context: '환경보호 주제가 잘 반영되어 있는가?',
+            creativity: '창의적이고 실현 가능한 프로젝트인가?'
+          },
+          sampleAnswer: '고등학생들이 팀을 이루어 지역 환경 문제를 선정하고, 과학적 조사, 기술적 해결책 개발, 공학적 프로토타입 제작, 예술적 홍보물 제작, 수학적 데이터 분석을 통해 종합적인 환경보호 캠페인을 기획하는 12주간의 STEAM 프로젝트를 설계해주세요.',
           maxScore: 100
         }
       ]
