@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -101,50 +100,104 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
 
   const evaluatePrompt = (prompt: string, problem: Problem): number => {
     let score = 0;
+    const lowerPrompt = prompt.toLowerCase();
     
-    // 채점 기준에 따라 점수 부여
-    if (prompt.includes(problem.evaluationCriteria.clarity)) {
-      score += 25;
-    }
-    if (prompt.includes(problem.evaluationCriteria.specificity)) {
-      score += 25;
-    }
-    if (prompt.includes(problem.evaluationCriteria.context)) {
-      score += 25;
-    }
-    if (prompt.includes(problem.evaluationCriteria.creativity)) {
-      score += 25;
+    // 기본 점수 (프롬프트가 비어있지 않으면)
+    if (prompt.trim().length > 10) {
+      score += 20;
     }
     
-    // 추가적인 평가 로직 (AI 모델 활용)
-    // ...
+    // 명확성 평가 (질문이나 요청이 명확한가?)
+    if (lowerPrompt.includes('해주세요') || lowerPrompt.includes('만들어') || 
+        lowerPrompt.includes('제안') || lowerPrompt.includes('설명') ||
+        lowerPrompt.includes('도움') || lowerPrompt.includes('방법')) {
+      score += 20;
+    }
     
-    return Math.min(score, problem.maxScore); // 최대 점수 제한
+    // 구체성 평가 (구체적인 상황이나 조건이 명시되어 있는가?)
+    if (lowerPrompt.includes('학년') || lowerPrompt.includes('수학') || 
+        lowerPrompt.includes('영어') || lowerPrompt.includes('과학') ||
+        lowerPrompt.includes('학생') || lowerPrompt.includes('교실') ||
+        lowerPrompt.includes('수업')) {
+      score += 20;
+    }
+    
+    // 맥락성 평가 (교육 상황이나 배경이 설명되어 있는가?)
+    if (lowerPrompt.includes('동기') || lowerPrompt.includes('흥미') || 
+        lowerPrompt.includes('참여') || lowerPrompt.includes('학습') ||
+        lowerPrompt.includes('교육') || lowerPrompt.includes('지도')) {
+      score += 20;
+    }
+    
+    // 창의성 평가 (구체적인 방법이나 개수를 요청하는가?)
+    if (lowerPrompt.match(/\d+가지|\d+개|단계|방법|예시|활동/) ||
+        lowerPrompt.includes('게임') || lowerPrompt.includes('놀이') ||
+        lowerPrompt.includes('재미') || lowerPrompt.includes('창의')) {
+      score += 20;
+    }
+    
+    // 보너스 점수 (길이와 상세함)
+    if (prompt.length > 100) {
+      score += 10;
+    }
+    if (prompt.length > 200) {
+      score += 10;
+    }
+    
+    return Math.min(score, problem.maxScore);
   };
 
   const generateStrengths = (prompt: string, score: number): string[] => {
     const strengths = [];
+    const lowerPrompt = prompt.toLowerCase();
+    
     if (score >= 80) {
-      strengths.push("프롬프트가 명확하고 구체적입니다.");
-      strengths.push("창의적인 접근 방식이 돋보입니다.");
+      strengths.push("프롬프트가 명확하고 구체적으로 작성되었습니다.");
+      if (lowerPrompt.includes('학년') || lowerPrompt.includes('학생')) {
+        strengths.push("대상 학생에 대한 구체적인 정보를 포함했습니다.");
+      }
+      if (lowerPrompt.match(/\d+가지|\d+개/)) {
+        strengths.push("구체적인 개수를 명시하여 명확한 요청을 했습니다.");
+      }
     } else if (score >= 60) {
-      strengths.push("프롬프트가 전반적으로 양호합니다.");
+      strengths.push("프롬프트의 기본 구조가 양호합니다.");
+      if (lowerPrompt.includes('해주세요') || lowerPrompt.includes('제안')) {
+        strengths.push("정중하고 명확한 요청 표현을 사용했습니다.");
+      }
+    } else if (score >= 40) {
+      strengths.push("기본적인 요청 의도는 파악할 수 있습니다.");
     } else {
-      strengths.push("개선할 여지가 있습니다. 힌트를 참고해보세요.");
+      strengths.push("프롬프트 작성을 시도해주셔서 좋습니다.");
     }
+    
     return strengths;
   };
 
   const generateImprovements = (prompt: string, score: number): string[] => {
     const improvements = [];
-    if (score < 80) {
-      improvements.push("프롬프트의 명확성을 높여보세요.");
-      improvements.push("구체적인 상황 설정을 추가해보세요.");
+    const lowerPrompt = prompt.toLowerCase();
+    
+    if (!lowerPrompt.includes('학년') && !lowerPrompt.includes('학생')) {
+      improvements.push("대상 학생의 학년이나 특성을 명시해보세요.");
     }
+    
+    if (!lowerPrompt.match(/\d+가지|\d+개|단계/)) {
+      improvements.push("구체적인 개수나 단계를 요청해보세요 (예: 3가지 방법).");
+    }
+    
+    if (!lowerPrompt.includes('상황') && !lowerPrompt.includes('배경')) {
+      improvements.push("구체적인 상황이나 배경을 설명해보세요.");
+    }
+    
+    if (prompt.length < 50) {
+      improvements.push("더 자세하고 구체적으로 설명해보세요.");
+    }
+    
     if (score < 60) {
-      improvements.push("AI가 이해하기 쉽도록 문장을 다듬어보세요.");
+      improvements.push("AI가 이해하기 쉽도록 명확한 문장으로 작성해보세요.");
     }
-    return improvements;
+    
+    return improvements.slice(0, 3); // 최대 3개의 개선점만 제시
   };
 
   const generateEnhancedPrompt = (prompt: string, problem: Problem): string => {
