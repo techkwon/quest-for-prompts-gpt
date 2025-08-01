@@ -309,7 +309,70 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
 
   const quests: Quest[] = [
     {
-      id: 'classroom-management-1',
+      id: 'basic-ai-chat-1',
+      title: 'AI 대화 기초',
+      description: 'AI와 효과적으로 대화하는 기본 방법을 배워보세요',
+      difficulty: 'beginner',
+      category: 'AI 기초',
+      problems: [
+        {
+          id: 'simple-question',
+          question: '간단한 질문하기',
+          context: '초등학교 5학년 학생이 AI에게 과학 숙제에 대해 질문을 하려고 합니다. "태양계"라는 주제로 AI가 이해하기 쉽게 설명해줄 수 있는 프롬프트를 작성해주세요.',
+          hints: [
+            '학생의 학년을 명시해보세요',
+            '구체적인 주제(태양계)를 포함해보세요',
+            '설명 방식을 요청해보세요'
+          ],
+          evaluationCriteria: {
+            clarity: '질문이 명확하고 이해하기 쉬운가?',
+            specificity: '학년과 주제가 구체적으로 명시되어 있는가?',
+            context: '학습 목적이 명확한가?',
+            creativity: '효과적인 설명 방식을 요청하는가?'
+          },
+          sampleAnswer: '초등학교 5학년 학생이 이해할 수 있도록 태양계의 8개 행성을 순서대로 설명해주세요. 각 행성의 특징을 재미있는 비유를 사용해서 설명해주세요.',
+          maxScore: 100
+        },
+        {
+          id: 'story-request',
+          question: '창작 이야기 요청하기',
+          context: '유치원생들을 위한 동화를 AI에게 부탁하려고 합니다. 동물이 주인공인 짧은 이야기를 만들어달라는 프롬프트를 작성해주세요.',
+          hints: [
+            '대상 연령을 명시해보세요',
+            '주인공과 소재를 구체적으로 요청해보세요',
+            '이야기의 길이나 교훈을 포함해보세요'
+          ],
+          evaluationCriteria: {
+            clarity: '요청사항이 명확한가?',
+            specificity: '연령대와 주제가 구체적인가?',
+            context: '유치원생에게 적합한 내용인가?',
+            creativity: '흥미로운 요소를 포함하는가?'
+          },
+          sampleAnswer: '유치원생(5-7세)을 위한 토끼가 주인공인 5분 분량의 동화를 만들어주세요. 친구와의 우정에 대한 교훈이 담긴 따뜻하고 재미있는 이야기여야 합니다.',
+          maxScore: 100
+        },
+        {
+          id: 'homework-help',
+          question: '숙제 도움 요청하기',
+          context: '중학교 1학년 학생이 수학 숙제를 하다가 모르는 문제가 생겼습니다. AI에게 문제 해결 방법을 단계적으로 설명해달라는 프롬프트를 작성해주세요.',
+          hints: [
+            '학년과 과목을 명시해보세요',
+            '설명 방식(단계적)을 요청해보세요',
+            '이해하기 쉬운 방법을 부탁해보세요'
+          ],
+          evaluationCriteria: {
+            clarity: '도움 요청이 명확한가?',
+            specificity: '학년과 과목이 구체적인가?',
+            context: '학습 목적이 분명한가?',
+            creativity: '효과적인 학습 방법을 요청하는가?'
+          },
+          sampleAnswer: '중학교 1학년 학생이 이해할 수 있도록 일차방정식 문제 풀이 과정을 단계별로 설명해주세요. 각 단계마다 왜 그렇게 하는지 이유도 함께 설명해주세요.',
+          maxScore: 100
+        }
+      ]
+    },
+    {
+      id: 'classroom-management-2',
       title: '교실 관리 도우미',
       description: '학급 운영에 도움이 되는 AI 활용법을 배워보세요',
       difficulty: 'beginner',
@@ -349,6 +412,51 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
             creativity: '다양하고 실용적인 접근법을 요청하는가?'
           },
           sampleAnswer: '초등학교 4학년 교실에서 수업 중 떠드는 학생들을 관리하기 위한 긍정적 행동 지원 전략을 5가지 제안해주세요. 각 전략은 예방적 접근과 즉시 대응 방법을 포함하고, 학생들의 자기조절 능력을 기를 수 있는 방법이어야 합니다.',
+          maxScore: 100
+        },
+        {
+          id: 'parent-communication',
+          question: '학부모 소통 개선하기',
+          context: '초등학교 3학년 담임교사로서 학부모와의 소통을 개선하고 싶습니다. 학생의 학교생활과 학습 상황을 효과적으로 전달할 수 있는 AI 소통 도우미를 위한 프롬프트를 작성하세요.',
+          hints: [
+            '소통의 목적을 명확히 해보세요',
+            '전달할 내용의 종류를 구체적으로 명시해보세요',
+            '긍정적이고 건설적인 소통 방식을 요청해보세요'
+          ],
+          evaluationCriteria: {
+            clarity: '소통 목적이 명확한가?',
+            specificity: '학년과 소통 내용이 구체적인가?',
+            context: '학부모의 관심사를 고려했는가?',
+            creativity: '효과적인 소통 방법을 요청하는가?'
+          },
+          sampleAnswer: '초등학교 3학년 학부모에게 자녀의 학교생활 적응 상황과 학습 진도를 긍정적이고 구체적으로 전달하는 방법을 5가지 제안해주세요. 각 방법은 학부모의 우려를 해소하고 가정에서의 지원 방안도 포함해야 합니다.',
+          maxScore: 100
+        }
+      ]
+    },
+    {
+      id: 'creative-writing-3',
+      title: '창의적 글쓰기 지도',
+      description: '학생들의 창의성을 키우는 글쓰기 활동을 만들어보세요',
+      difficulty: 'beginner',
+      category: '창의 교육',
+      problems: [
+        {
+          id: 'story-prompt',
+          question: '상상력을 키우는 이야기 만들기',
+          context: '초등학교 6학년 학생들의 창의적 글쓰기 능력을 향상시키고 싶습니다. 학생들이 흥미를 가질 수 있는 이야기 소재와 글쓰기 가이드를 제공하는 AI 튜터를 위한 프롬프트를 작성하세요.',
+          hints: [
+            '학생들의 학년과 관심사를 고려해보세요',
+            '창의적 사고를 유도하는 질문을 포함해보세요',
+            '단계별 글쓰기 과정을 요청해보세요'
+          ],
+          evaluationCriteria: {
+            clarity: '글쓰기 목표가 명확한가?',
+            specificity: '학년과 활동 내용이 구체적인가?',
+            context: '창의성 개발에 적합한가?',
+            creativity: '흥미로운 접근법을 요청하는가?'
+          },
+          sampleAnswer: '초등학교 6학년 학생들이 "미래의 학교"를 주제로 상상력 넘치는 이야기를 쓸 수 있도록 3단계 글쓰기 가이드를 만들어주세요. 각 단계마다 창의적 사고를 자극하는 질문과 구체적인 작성 방법을 포함해주세요.',
           maxScore: 100
         }
       ]
