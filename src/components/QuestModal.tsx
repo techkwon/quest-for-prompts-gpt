@@ -234,11 +234,11 @@ const QuestModal: React.FC<QuestModalProps> = ({ isOpen, onClose, onComplete, us
   };
 
   const calculateExperience = (averageScore: number): number => {
-    let experience = 40;
+    let experience = 20;
     if (averageScore >= 90) {
-      experience = 60;
+      experience = 30;
     } else if (averageScore >= 80) {
-      experience = 50;
+      experience = 25;
     }
     return experience;
   };
