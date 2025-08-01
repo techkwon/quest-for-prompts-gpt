@@ -26,7 +26,7 @@ const Index = () => {
   const [userProgress, setUserProgress] = useState<UserProgress>({
     level: 1,
     experience: 0,
-    experienceToNext: 200,
+    experienceToNext: 100,
     title: "GPT 초보자",
     completedQuests: 0,
     totalScore: 0,
@@ -112,7 +112,7 @@ const Index = () => {
         averageScore: newAverageScore,
         streak: newStreak,
         maxStreak: newMaxStreak,
-        experienceToNext: newLevel > prev.level ? 250 + (newLevel * 50) : prev.experienceToNext
+        experienceToNext: newLevel > prev.level ? 125 + (newLevel * 25) : prev.experienceToNext
       };
       
       // 새로운 칭호 확인
